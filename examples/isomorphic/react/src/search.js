@@ -17,39 +17,40 @@ var Search = React.createClass({
 
   componentDidMount: function() {
     this.refs.search.getDOMNode().focus();
+    var value = this.refs.search.getDOMNode().value;
+    if(value){
+      this.search(value);
+      this.setState({defaultClass: 'search-focused'});
+    }
   },
 
   handleSubmit: function(e) {
     e.preventDefault();
-    if(this.state.searchString.trim().length) {
-      this.props.onSearch(this.state.searchString);
+  },
+
+  search: function(val){
+    if(val){
+      this.props.flux.actions.routeTo('/search/' + encodeURI(val));
+      this.setState({
+        defaultClass: 'search-focused'
+      });
     }
   },
 
   handleChange: function(e) {
-    if(e.target.value.length) {
-      this.setState({
-        searchString: e.target.value,
-        prevSearch: e.target.value
-      });
-    }
-    else {
-      this.setState({
-        searchString: e.target.value,
-      });
-    }
+    this.search(e.target.value);
   },
 
   handleClick: function(e) {
-    if(this.state.defaultClass != 'search-home') {
+    if(this.state.defaultClass !== 'search-home') {
       this.setState({
-        defaultClass: 'search-focused',
+        defaultClass: 'search-focused'
       });
     }
   },
 
   handleBlur: function(e) {
-    if(this.state.defaultClass != 'search-home') {
+    if(this.state.defaultClass !== 'search-home') {
       if(!this.props.search.string.length) {
         this.setState({
           defaultClass: 'search-blurred'
@@ -74,21 +75,22 @@ var Search = React.createClass({
   render: function() {
     var searchContext;
     if(this.props.search.loading) {
-      searchContext = <img className="search-loading" src="/images/si.gif" />
-    } else {
-      searchContext = <button className="search-submit" type="submit">search</button>
+      searchContext = <img className="search-loading" src="/images/si.gif" />;
+    }
+    else {
+      searchContext = <button className="search-submit" type="submit">search</button>;
     }
     return (
       <div className={this.state.defaultClass}>
         <form method="get" action="/" className="search-form" onSubmit={this.handleSubmit}>
-          <input placeholder="Super Mario Bros." type="text" ref="search" className="search-input" name="q" onChange={this.handleChange} onClick={this.handleClick} onBlur={this.handleBlur} value={this.state.searchString} />
+          <input placeholder="Super Mario Bros." type="text" ref="search" className="search-input" name="q" onClick={this.handleClick} onBlur={this.handleBlur} onChange={this.handleChange} />
           {searchContext}
         </form>
       </div>
-    )
+    );
   }
 
-})
+});
 
 
-module.exports = Search
+module.exports = Search;

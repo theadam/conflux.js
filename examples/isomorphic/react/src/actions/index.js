@@ -1,7 +1,8 @@
 var R = require('ramda');
-var Bacon = require('bacon.model');
 
 var Conflux = require('../../../../../');
+var Bacon = Conflux.Bacon;
+
 var api = require('../api');
 
 module.exports = function createActions(){
@@ -21,7 +22,7 @@ module.exports = function createActions(){
   return {
     loadGame: Conflux.PromiseAction(R.memoize(api.loadGameData)),
     //loadGame: Conflux.Action((bus) => bus.map(R.memoize(api.loadGameData)).flatMapLatest(Bacon.fromPromise)),
-    searchUpdate: Conflux.PromiseAction(api.search),
+    searchUpdate: Conflux.Action((bus) => bus.debounce(500).map(api.search).flatMapLatest(Bacon.fromPromise)),
     setRouter: setRouter,
     routeTo: routeTo,
     setRouteState: Conflux.Action()

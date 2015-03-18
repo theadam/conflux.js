@@ -19,7 +19,6 @@ var RouteHandler = Router.RouteHandler;
 var App = React.createClass({
 
   searchGames: function(query) {
-    this.props.flux.actions.searchUpdate(query);
     this.props.flux.actions.routeTo('/search/' + encodeURI(query));
   },
 
@@ -35,15 +34,13 @@ var App = React.createClass({
       </head>
       <body>
         <Global values={{[stateKey]:this.props.state}} />
-        <Conflux.Component flux={this.props.flux} >
-          <a href="https://github.com/chadpaulson/react-isomorphic-video-game-search"><img className="github-ribbon" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" /></a>
-          <Conflux.Component listenTo={['route', {search: ['string', 'loading']}]} >
-            <Search onSearch={this.searchGames} />
-          </Conflux.Component>
-          <DocumentTitle title="%react-iso-vgs%">
-            <RouteHandler flux={this.props.flux}/>
-          </DocumentTitle>
+        <a href="https://github.com/chadpaulson/react-isomorphic-video-game-search"><img className="github-ribbon" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" /></a>
+        <Conflux.Component flux={this.props.flux} listenTo={['route', {search: ['string', 'loading']}]} >
+          <Search onSearch={this.searchGames} />
         </Conflux.Component>
+        <DocumentTitle title="%react-iso-vgs%">
+          <RouteHandler flux={this.props.flux}/>
+        </DocumentTitle>
         <script src="/app.js" type="text/javascript" />
       </body>
       </html>
@@ -69,7 +66,7 @@ module.exports = {
 if (typeof window !== 'undefined') {
   window.onload = function() {
     var serverState = Global.get(stateKey);
-    console.log(serverState);
+
     var flux = Conflux(actions, stores, serverState);
 
     var router = Router.create({
