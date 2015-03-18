@@ -1,7 +1,8 @@
 var _ = require('lodash');
 var project = require('./utils/project');
-var Bacon = require('bacon.model');
+var Bacon = require('baconjs');
 var Stores = require('./stores');
+var combine = require('./utils/combine');
 
 function Conflux(actions, stores, initialValues){
   if(!(this instanceof Conflux)) return new Conflux(actions, stores, initialValues);
@@ -15,10 +16,10 @@ function Conflux(actions, stores, initialValues){
   this.actions = project(this.actions, 'push');
 }
 
-Conflux.combine = Bacon.Model.combine;
+Conflux.combine = combine;
 
 Conflux.prototype.serialize = function(){
-  return Conflux.combine(this.stores).get();
+  return Conflux.combine(this.stores).value;
 };
 
 _.merge(Conflux, require('./actions'));

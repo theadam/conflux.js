@@ -1,11 +1,10 @@
-var Bacon = require('bacon.model');
 var _ = require('lodash');
 var isBacon = require('../../utils/isBacon');
+var combine = require('../../utils/combine');
 
 module.exports = function getModel(stores, descriptor){
   if(_.isString(descriptor)){
-    var obj = {};
-    obj[descriptor] = stores[descriptor];
+    stores = stores[descriptor];
   }
   if(isBacon(stores)){
     return stores;
@@ -14,6 +13,6 @@ module.exports = function getModel(stores, descriptor){
     return _.merge.apply(_, _.map(stores, getModel));
   }
   else{
-    return Bacon.Model.combine(stores);
+    return combine(stores);
   }
 };

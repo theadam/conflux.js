@@ -1,4 +1,4 @@
-var Bacon = require('bacon.model');
+var Bacon = require('baconjs');
 var _ = require('lodash');
 
 var isBacon = require('./utils/isBacon');

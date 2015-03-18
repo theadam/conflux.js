@@ -4,15 +4,16 @@ var React = require('react/addons');
 var Search = React.createClass({
 
   getInitialState: function() {
+    var defaultClass = 'search-blurred';
+
     if(this.props.route.pathname === '/') {
-      var defaultClass = 'search-home'
-    } else {
-      var defaultClass = 'search-blurred'
+      defaultClass = 'search-home';
     }
+
     return {
       searchString: '',
       defaultClass: defaultClass
-    }
+    };
   },
 
   componentDidMount: function() {
@@ -29,19 +30,17 @@ var Search = React.createClass({
   },
 
   search: function(val){
-    if(val){
-      this.props.flux.actions.routeTo('/search/' + encodeURI(val));
-      this.setState({
-        defaultClass: 'search-focused'
-      });
-    }
+    this.props.flux.actions.routeTo('/search/' + encodeURI(val));
+    this.setState({
+      defaultClass: 'search-focused'
+    });
   },
 
   handleChange: function(e) {
     this.search(e.target.value);
   },
 
-  handleClick: function(e) {
+  handleClick: function() {
     if(this.state.defaultClass !== 'search-home') {
       this.setState({
         defaultClass: 'search-focused'
@@ -49,7 +48,7 @@ var Search = React.createClass({
     }
   },
 
-  handleBlur: function(e) {
+  handleBlur: function() {
     if(this.state.defaultClass !== 'search-home') {
       if(!this.props.search.string.length) {
         this.setState({

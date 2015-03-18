@@ -16,6 +16,7 @@ module.exports = {
   },
 
   search: function(searchString){
+    if(searchString === '') return Promise.resolve({searchString, searchResults: []});
     return new Promise(function(resolve){
       request
         .get(config.LOCAL_API_HOST + '/api/search/' + searchString)

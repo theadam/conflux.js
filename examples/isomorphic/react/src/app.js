@@ -10,7 +10,9 @@ var Conflux = require('../../../../');
 var actions = require('./actions');
 var stores = require('./stores');
 var Global = require('react-global');
+var initializeRoutes = require('../../utils/initializeRoutes');
 var stateKey = '__confluxState';
+
 
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
@@ -26,19 +28,18 @@ var App = React.createClass({
     return (
       <html>
       <head>
-        <title>%react-iso-vgs%</title>
+        <title>%document_title_placeholder%</title>
       <meta charSet="UTF-8" />
       <link href="http://fonts.googleapis.com/css?family=Merriweather+Sans:800" rel="stylesheet" type="text/css" />
       <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" />
       <link rel="stylesheet" type="text/css" href="/css/style.css" />
       </head>
       <body>
-        <Global values={{[stateKey]:this.props.state}} />
-        <a href="https://github.com/chadpaulson/react-isomorphic-video-game-search"><img className="github-ribbon" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" /></a>
-        <Conflux.Component flux={this.props.flux} listenTo={['route', {search: ['string', 'loading']}]} >
+        <Global values={{[stateKey]: this.props.state}} />
+        <Conflux.Component flux={this.props.flux} listenTo={['route', 'search']} >
           <Search onSearch={this.searchGames} />
         </Conflux.Component>
-        <DocumentTitle title="%react-iso-vgs%">
+        <DocumentTitle title="%document_title_placeholder%">
           <RouteHandler flux={this.props.flux}/>
         </DocumentTitle>
         <script src="/app.js" type="text/javascript" />
@@ -58,7 +59,8 @@ var routes = (
 );
 
 module.exports = {
-  routes: routes
+  routes: routes,
+  title: DocumentTitle
 };
 
 
@@ -79,14 +81,12 @@ if (typeof window !== 'undefined') {
     router.run(function(Handler, state){
       flux.actions.setRouteState(state);
 
-      Promise.all(
-        state.routes.map((route) => route.handler.initialize)
-          .filter((method) => typeof method === 'function')
-          .map((method) => method(state, flux)))
+
+      initializeRoutes(state.routes, state, flux)
         .then(() => {
           React.render(<Handler flux={flux} state={serverState} />, document);
         })
-        .catch((e) => {throw e});
+        .catch((e) => {throw e; });
     });
 
   };

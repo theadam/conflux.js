@@ -18,6 +18,7 @@ var actions = require('./react/src/actions');
 var stores = require('./react/src/stores');
 
 var App = require('./react/src/app');
+var initializeRoutes = require('./utils/initializeRoutes');
 
 var app = express();
 
@@ -58,13 +59,10 @@ app.use(function(req, res, next) {
   Router.run(App.routes, req.url, function(Handler, state){
     flux.actions.setRouteState(state);
 
-    Promise.all(
-      state.routes.map((route) => route.handler.initialize)
-        .filter((method) => typeof method === 'function')
-        .map((method) => method(state, flux)))
+    initializeRoutes(state.routes, state, flux)
       .then(() => {
         var str = React.renderToString(<Handler flux={flux} state={flux.serialize()}/>);
-        res.send(str);
+        res.send('<!DOCTYPE html>' + str.replace('%document_title_placeholder%', App.title.rewind()));
       })
       .catch(next);
   });
@@ -72,6 +70,7 @@ app.use(function(req, res, next) {
 
 // handle errors
 app.use(function(err, req, res, next) {
+  console.log(err);
   res.status(err.status || 500).send({
     message: err.message,
     fileName: err.fileName,

@@ -9,16 +9,16 @@
   "author": "Adam Nalisnick",
   "license": "MIT",
   "dependencies": {
-    "bacon.model": "^0.1.12",
+    "baconjs": "^0.7.53",
     "lodash": "^2.4.1",
     "react": "^0.12.0"
   },
   "devDependencies": {
-    "babel-eslint": "^2.0.0",
+    "babel-eslint": "1.0.14",
     "babelify": "^5.0.4",
     "browserify": "^7.0.0",
     "es6-promise": "^2.0.1",
-    "eslint": "^0.17.0",
+    "eslint": "~0.15.1",
     "ramda": "^0.8.0"
   },
   "browserify": {

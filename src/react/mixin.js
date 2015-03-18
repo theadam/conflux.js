@@ -5,12 +5,6 @@ var Conflux = require('../conflux');
 
 var getModel = require('./utils/getModel');
 
-var listenToPropType = PropTypes.oneOfType([
-  PropTypes.string,
-  PropTypes.array,
-  PropTypes.object
-]);
-
 function ConfluxMixin() {
   var args = Array.prototype.slice.call(arguments);
   return {
@@ -23,7 +17,11 @@ function ConfluxMixin() {
     },
 
     propTypes: {
-      listenTo: listenToPropType,
+      listenTo: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.array,
+        PropTypes.object
+      ]),
       flux: PropTypes.instanceOf(Conflux)
     },
 
@@ -38,7 +36,7 @@ function ConfluxMixin() {
         this._listeners.push(
           model.changes().onValue((state) => this.setState(state))
         );
-        return model.get();
+        return model.value;
       }
       return null;
     },

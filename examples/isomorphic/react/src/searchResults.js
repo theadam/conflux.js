@@ -6,17 +6,15 @@ var DocumentTitle = require('react-document-title');
 var Link = require('react-router').Link;
 
 var SearchResults = React.createClass({
-  mixins: [Conflux.Mixin({search: ['results', 'string']})],
+  mixins: [Conflux.Mixin('search')],
 
   statics: {
     initialize: (state, flux) => {
-      if(flux.stores.search.string.get() === state.params.query) return Promise.resolve();
-      else{
-        return new Promise((res) => {
-          flux.stores.search.string.changes().take(1).onValue(res);
-          flux.actions.searchUpdate(state.params.query);
-        });
-      }
+      if(flux.stores.search.string.value === state.params.query) return Promise.resolve();
+
+      var promise = flux.stores.search.string.changes().firstToPromise();
+      flux.actions.searchUpdate(state.params.query);
+      return promise;
     }
   },
 
@@ -53,4 +51,4 @@ var SearchResults = React.createClass({
   }
 });
 
-  module.exports = SearchResults
+  module.exports = SearchResults;
