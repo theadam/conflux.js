@@ -4,22 +4,26 @@
   "description": "Flux + Bacon.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "browserify": "browserify -d examples/test/app.js > examples/test/index.js"
   },
   "author": "Adam Nalisnick",
   "license": "MIT",
   "dependencies": {
-    "baconjs": "^0.7.37",
-    "lodash": "^2.4.1"
+    "bacon.model": "^0.1.12",
+    "lodash": "^2.4.1",
+    "react": "^0.12.0"
   },
   "devDependencies": {
+    "babel-eslint": "^2.0.0",
+    "babelify": "^5.0.4",
     "browserify": "^7.0.0",
     "es6-promise": "^2.0.1",
-    "ramda": "^0.8.0",
-    "react": "^0.12.1",
-    "reactify": "^0.17.1"
+    "eslint": "^0.17.0",
+    "ramda": "^0.8.0"
   },
-  "scripts": {
-    "browserify": "node_modules/.bin/browserify -d --extension=.jsx -t reactify examples/test/app.jsx > examples/test/index.js"
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
   }
 }

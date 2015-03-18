@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://requirebin.com/ -->
+<html lang="en" class="dk_fouc has-js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>RequireBin</title>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="http://requirebin.com/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="./RequireBin_files/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="./RequireBin_files/theme.css">
+    <link rel="stylesheet" href="http://requirebin.com/css/bootstrap.css">
+    <link rel="stylesheet" href="http://requirebin.com/flatui/css/flat-ui.css">
+    <link rel="stylesheet" type="text/css" href="./RequireBin_files/style.css">
+  </head>
+  <body>
+    <a href="./RequireBin_files/RequireBin.html"><img class="logo" src="./RequireBin_files/logo-black.png"></a>
+    
+    <p class="tagline">Shareable JavaScript programs powered by <a href="http://npmjs.org/" target="_blank"><span class="npm"></span></a> and <a href="http://browserify.org/" target="_blank"><span class="browserify"></span></a></p>
+
+    <div class="dk_container actionsMenu dk_shown dk_theme_default" id="dk_container_undefined" tabindex="1"><a class="dk_toggle"><span class="dk_label">Actions</span><span class="select-icon"></span></a><div class="dk_options"><ul class="dk_options_inner"><li class="dk_option_current"><a data-dk-dropdown-value="noop">Actions</a></li><li class=""><a data-dk-dropdown-value="save">Save Gist</a></li><li class=""><a data-dk-dropdown-value="save-private">Save Private Gist</a></li><li class=""><a data-dk-dropdown-value="howto">See instructions</a></li><li class=""><a data-dk-dropdown-value="share">Share/Embed</a></li></ul></div></div><select class="actionsMenu" value="Actions" tabindex="1" style="display: none;">
+      <option value="noop" selected="selected">Actions</option>
+      <option value="save">Save Gist</option>
+      <option value="save-private">Save Private Gist</option>
+      <option value="howto">See instructions</option>
+      <option value="share">Share/Embed</option>
+    </select>
+    
+    <div class="actionsButtons">
+      <a title="COMMAND+ENTER or CTRL+ENTER" data-action="play" class="play-button btn btn-block btn-lg btn-primary"><i class="fui-eye-16"></i>Rebuild</a>
+    </div>
+    
+    <span class="cacheState">Code has been edited since last build</span>
+    
+    <div id="play" class="right">
+      <div id="share" class="hidden">
+        <p id="shareDisabled">You have to save your project before you can embed it.</p>
+        <div id="shareInstructions" class="hidden">
+          <p>HTML Embed code:</p>
+          <textarea id="shareTextarea"></textarea>
+          <p>HTML Embed example:</p>
+          <p><a href="http://requirebin.com/embed?gist=6264704" target="_blank">requirebin.com/embed?gist=6264704</a></p>
+          <p>Share Badge Markdown code:</p>
+          <textarea id="shareBadgeTextarea"></textarea>
+          <p>Markdown Share Badge image code:</p>
+          <textarea id="markdownShareBadgeTextarea"></textarea>
+          <p>Share Badge example:</p>
+          <a class="requirebin-link" target="_blank"><div class="requirebin-badge"></div></a>
+        </div>
+      </div>
+      <div id="howto" class="hidden">
+        <p>Node.js style modular code gets transformed into code that can run client-side using <a href="http://browserify.org/" target="_blank">browserify</a> via <a target="_blank" href="http://wzrd.in.nyud.net/">browserify-cdn</a>.</p>
+                
+        <p>Want to see an example? <a target="_blank" href="http://requirebin.com/?gist=juliangruber/6264704">requirebin.com/?gist=juliangruber/6264704</a></p>
+        <p>They are also embeddable <a target="_blank" href="http://requirebin.com/embed?gist=juliangruber/6264704">requirebin.com/embed?gist=juliangruber/6264704</a></p>
+        <p>Here are <a href="https://gist.github.com/maxogden/9425694">a bunch more examples to play with</a>.</p>
+        <p>Need HTML or CSS? Check out <a target="_blank" href="http://requirebin.com/?gist=maxogden/9842648">insert-css and domify</a>.</p>
+        <p>The <span class="view-icon"></span> buttons run the code from the current bin.</p>
+        <div class="col-xs-3"><a class="run-btn btn btn-block btn-lg btn-primary"><i class="fui-eye-16"></i> Rebuild</a></div>
+        
+        <div class="attribution">
+          <p>View the source or report bugs <a href="https://github.com/maxogden/requirebin" target="_blank">on Github</a>.</p>
+          <p><strong>Need Help?</strong> Send a question via tweet to <a href="http://twitter.com/maxogden" target="_blank">@maxogden</a></p>
+          <p><a href="http://thenounproject.com/noun/recycle-bin/#icon-No12230" target="_blank">Recycle Bin</a> icon designed by <a href="http://thenounproject.com/jjaysonn" target="_blank">jayson lim</a></p>
+          <p><a href="http://requirebin.com/#" class="hide-howto">hide these instructions</a></p>
+        </div>
+      </div>
+      <div class="packagejson hidden">
+        <h6>Modules In Use</h6>
+        <div id="tagsinput" class="tagsinput"><span class="tag"><a target="_blank" href="http://npmjs.org/baconjs"><span>baconjs&nbsp;&nbsp;</span></a></span></div>
+      </div>
+    <iframe scrolling="no" style="width: 100%; height: 100%; border: 0px;"></iframe></div>
+    
+    <div class="spinner hidden">
+      <div class="rect1"></div>
+      <div class="rect2"></div>
+      <div class="rect3"></div>
+      <div class="rect4"></div>
+      <div class="rect5"></div>
+    </div>
+    
+    <div id="edit" class="left">
+
+    <div class="CodeMirror CodeMirror-wrap cm-s-mistakes CodeMirror-focused"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 41px; left: 33px;"><textarea autocorrect="off" autocapitalize="off" tabindex="0" style="position: absolute; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-hscrollbar" style="left: 29px; min-height: 18px;"><div style="height: 1px;"></div></div><div class="CodeMirror-vscrollbar" style="min-width: 18px;"><div style="width: 1px;"></div></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-scroll" tabindex="-1" draggable="false"><div style="position: relative; min-height: 100%;"><div class="CodeMirror-sizer" style="margin-left: 29px; min-height: 260px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span class="cm-keyword">v</span><span class="cm-keyword">a</span><span class="cm-keyword">r</span><span> </span><span class="cm-variable">b</span><span class="cm-variable">u</span><span class="cm-variable">s</span><span> </span><span>=</span><span> </span><span class="cm-keyword">n</span><span class="cm-keyword">e</span><span class="cm-keyword">w</span><span> </span><span class="cm-variable">B</span><span class="cm-variable">a</span><span class="cm-variable">c</span><span class="cm-variable">o</span><span class="cm-variable">n</span><span>.</span><span class="cm-property">B</span><span class="cm-property">u</span><span class="cm-property">s</span><span>(</span><span>)</span><span>;</span></pre></div><div style="position: relative; z-index: 1; display: none;"><div class="CodeMirror-selected" style="position: absolute; left: 4px; top: 36px; width: 686px; height: 18px;"></div></div><div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">1</div></div><pre><span class="cm-variable">console</span>.<span class="cm-property">clear</span>();</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">2</div></div><pre><span class="cm-keyword">var</span> <span class="cm-variable">Bacon</span> = <span class="cm-variable">require</span>(<span class="cm-string">'baconjs'</span>);</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">3</div></div><pre><span class="cm-keyword">var</span> <span class="cm-variable">bus</span> = <span class="cm-keyword">new</span> <span class="cm-variable">Bacon</span>.<span class="cm-property">Bus</span>();</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">4</div></div><pre>&nbsp;</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">5</div></div><pre><span class="cm-keyword">var</span> <span class="cm-variable">bus2</span> = <span class="cm-keyword">new</span> <span class="cm-variable">Bacon</span>.<span class="cm-property">Bus</span>();</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">6</div></div><pre><span class="cm-variable">Bacon</span>.<span class="cm-property">combineTemplate</span>({</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">7</div></div><pre>  <span class="cm-property">bus</span>: <span class="cm-variable">bus</span>,</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">8</div></div><pre>  <span class="cm-property">bus2</span>: <span class="cm-variable">bus2</span></pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">9</div></div><pre>}).<span class="cm-property">onValue</span>(<span class="cm-variable">console</span>.<span class="cm-property">log</span>.<span class="cm-property">bind</span>(<span class="cm-variable">console</span>));</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">10</div></div><pre><span class="cm-variable">bus</span>.<span class="cm-property">combine</span>(<span class="cm-variable">bus2</span>, <span class="cm-variable">Array</span>).<span class="cm-property">onValue</span>(<span class="cm-keyword">function</span>(<span class="cm-def">v</span>){<span class="cm-variable">console</span>.<span class="cm-property">log</span>(<span class="cm-variable-2">v</span>[<span class="cm-number">0</span>] + <span class="cm-string">' '</span> + <span class="cm-variable-2">v</span>[<span class="cm-number">1</span>])});</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">11</div></div><pre>&nbsp;</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">12</div></div><pre><span class="cm-variable">bus</span>.<span class="cm-property">push</span>(<span class="cm-number">1</span>);</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">13</div></div><pre>&nbsp;</pre></div><div style="position: relative;"><div style="position: absolute; left: -29px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">14</div></div><pre><span class="cm-variable">bus2</span>.<span class="cm-property">push</span>(<span class="cm-number">2</span>);</pre></div></div><div class="CodeMirror-cursor" style="left: 4px; top: 37px; height: 15px;">&nbsp;</div><div class="CodeMirror-cursor CodeMirror-secondarycursor" style="display: none;">&nbsp;</div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 260px;"></div><div class="CodeMirror-gutters"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 28px;"></div></div></div></div></div></div>
+<script async="" src="./RequireBin_files/analytics.js"></script><script id="template" type="text/template">// example using the raf module from npm. try changing some values!
+var requestAnimationFrame = require("raf")
+var canvas = document.createElement("canvas")
+
+canvas.width = 500
+canvas.height = 500
+
+document.body.appendChild(canvas)
+
+var context = canvas.getContext("2d")
+var zoom = 10
+
+requestAnimationFrame(function onFrame(delta) {
+  zoom += delta * 0.0001
+  
+  context.clearRect (0, 0, 500, 500)
+  context.beginPath()
+  context.arc(256 - zoom / Math.sqrt(2), 256 - zoom / Math.sqrt(2), zoom, 0, 2 * Math.PI, false)
+  context.closePath()
+  context.lineWidth = 5
+  context.strokeStyle = '#003300'
+  context.stroke()
+
+  requestAnimationFrame(onFrame);
+})
+</script>
+  <script type="text/javascript" src="./RequireBin_files/flatui-deps.js"></script>
+  <script type="text/javascript" src="./RequireBin_files/bundle.js"></script>
+  <script type="text/javascript" src="./RequireBin_files/uglifyjs2-browser.js"></script>
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-42274004-1', 'requirebin.com');
+    ga('send', 'pageview');
+
+  </script>
+  
+
+<div id="gm-bubble-content" data-state="disabled" data-hideoption="undefined" style="right:49px; top:143px; ">
+	<style>
+
+	@media print {
+	    #gm-bubble-content {
+	        display: none !important;
+	    }
+	}
+
+	#gm-bubble-content {		
+		position: fixed;
+		right: 100px;
+		bottom: 100px;
+		
+		transition: opacity 0.5s ease;
+		opacity: 0.25;	
+		width: 64px;
+		height: 64px;	
+		z-index: 2000000000;
+
+		-webkit-user-select: none;
+	}
+
+	#gm-bubble-content * {
+		box-sizing: initial;
+		transition: opacity 0.45s ease, -webkit-transform 0.45s;
+		-webkit-user-select: none;
+		text-align: left;
+	}
+	
+
+	.gm-bubble {
+		border-radius: 50%;
+		background-color: #fb8521 !important;
+	    margin: 0 auto;	
+	    cursor: pointer;	
+	    transition: -webkit-transform 0.50s;
+	}
+
+	[data-state="disabled"] .gm-bubble {
+		transition: background-color 0 1s;
+		background-color: #333 !important;
+	}
+
+	[data-state="disabled"][data-hideoption="true"] {
+		display: none;
+	}
+
+	#gm-bubble-main {	
+		position: absolute;	
+		width: 56px;
+		height: 56px;
+		background-repeat:no-repeat;
+		background-position:center; 
+		background-size: 70%;
+		z-index: 999;
+		top: 4px;
+		left: 4px;
+	}
+
+	#gm-bubble-content:not([data-state="disabled"]):hover {
+		transition: opacity 0.5s ease;
+		opacity: 1.0;
+		padding:64px 64px 32px 64px !important;
+		margin:-64px -64px -32px -64px !important;
+		width: 192px;
+		height: 160px;
+		box-sizing: border-box;
+	}
+
+	#gm-bubble-content:not([data-state="disabled"]).gm-bubble-notify {
+		transition: opacity 0.5s ease;
+		opacity: 1.0;
+	}
+
+	#gm-bubble-content:not([data-state="disabled"]):hover > #gm-bubble-container {
+		position: absolute;
+		top: 64px;
+		left: 64px;
+		width: 64px;
+		height: 64px;
+	}
+
+	.gm-bubblecontrol {
+		position: absolute;
+		top: 30%;
+		left: calc(50% - 17px);
+		width: 34px;
+		height: 34px;
+		z-index: 975;
+		opacity: 0;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 65%;
+		border: 3px solid transparent;
+		margin: -3px;
+	    transform: scale(.2);
+	}
+
+	.gm-bubblecontrol:hover {	
+/*		border-color:white;
+		box-shadow: 0 0 3px #fb8521;*/
+	}
+
+	.gm-bubblecontrol:active {
+		box-shadow: 0 0 3px 1px #fb8521;
+	}
+
+	.gm-bubble-button {
+		background-color: #333 !important;
+		width: 22px;
+		height: 22px;
+		border: 3px solid white;
+		margin: -3px;
+		left: calc(50% - 11px);
+	}
+
+	.gm-bubble-button:hover {
+		box-shadow: 0 0 3px 1px #3c3c3c;
+		z-index: 1000;
+	}
+
+	#gm-bubble-content .gm-bubble-small {
+		transition: -webkit-transform 0.70s 0.25s;
+		width: 22px;
+		height: 22px;
+		left: calc(50% - 11px);		
+		opacity: 0;
+	}
+
+	.gm-bubble-small:hover {
+		z-index: 1000;
+	}
+
+	.gm-bubble-button:hover #gm-bubble-blacklist:before {
+		font-family: sans-serif;
+		display: inline-block;
+		width: 75px;
+		float: right;
+		color: white;
+		background: #333;
+		margin-right: 30px;
+		text-align: right;
+		padding: 2px 7px;
+		border-radius: 3px;
+		top: 10px;
+		border: 2px solid white;
+	}
+
+	#gm-bubble-content:not([data-state="disabled"]):hover .gm-bubblecontrol {
+		opacity: 1;
+		box-shadow: 0 1px 2px rgba(0,0,0,0.35);
+	}
+
+	/* Play	icon */
+	#gm-bubble-playPause > svg {
+		opacity: 0;
+		transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	/* Pause icon */
+	[data-state="playing"] #gm-bubble-pause {
+		opacity: 1;
+		-webkit-transform: rotate(360deg);
+		transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	#gm-bubble-content:not([data-state="playing"]) #gm-bubble-play {
+		opacity: 1;
+		-webkit-transform: rotate(360deg);
+		transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+
+	/* Play-pause button */
+	#gm-bubble-content:not([data-state="disabled"]):hover #gm-bubble-playPause {
+		transition: -webkit-transform 0.50s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.30s, border-color 0.25s;	
+		-webkit-transform:translate(0, -65px) rotate(0deg);	
+	}
+
+	/* Next button */
+	#gm-bubble-content:not([data-state="disabled"]):hover #gm-bubble-next {
+		transition: -webkit-transform 0.50s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, opacity 0.30s, border-color 0.25s;
+		-webkit-transform:translate(50px, -40px) rotate(0deg);	
+	}
+	/* Prev button */
+	#gm-bubble-content:not([data-state="disabled"]):hover #gm-bubble-prev {
+		transition: -webkit-transform 0.50s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, opacity 0.30s, border-color 0.25s;
+		-webkit-transform:translate(-50px, -40px) rotate(0deg);
+	}
+
+	/* Thumbs up */
+	#gm-bubble-content:not([data-state="disabled"]) #gm-bubble-main:hover:not(:active) ~ #gm-bubble-like, #gm-bubble-like:hover {
+		transition: -webkit-transform 0.70s 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+		-webkit-transform:translate(-28px, 28px);
+		opacity: 1;
+	}
+
+	/* Thumbs down */
+	#gm-bubble-content:not([data-state="disabled"]) #gm-bubble-main:hover:not(:active) ~ #gm-bubble-dislike, #gm-bubble-dislike:hover {
+		transition: -webkit-transform 0.70s 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s;
+		-webkit-transform:translate(28px, 28px);
+		opacity: 1;
+	}
+
+/*	#gm-bubble-content:not([data-state="disabled"]):hover #gm-bubble-layer:not(:hover) ~ .gm-bubble-button, #gm-bubble-main:not(:active) ~ .gm-bubble-button {
+		transition-delay: 1s;
+	}
+*/
+	/* Blacklist button */
+	#gm-bubble-main:active ~ #gm-bubble-blacklist, #gm-bubble-layer:hover ~ #gm-bubble-blacklist, #gm-bubble-blacklist:hover {
+		transition: -webkit-transform 0.70s 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		-webkit-transform:translate(28px, 28px);
+		opacity: 1;
+	}
+
+	/* Move button */
+	#gm-bubble-main:active ~ #gm-bubble-drag, #gm-bubble-layer:hover ~ #gm-bubble-drag, #gm-bubble-drag:hover, #gm-bubble-drag:active {
+		transition: -webkit-transform 0.70s 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		-webkit-transform:translate(-28px, 28px);
+
+		opacity: 1;
+		cursor: move;
+	}
+	
+	#gm-bubble-progress-container {
+		top: 0;
+		left: 0;
+		position: absolute;
+		border-radius: 50%;
+		z-index: 950;		
+		width: 64px;
+		height: 64px;
+		box-shadow: 0 1px 2px rgba(0,0,0,0.35);
+	}
+
+
+	#gm-bubble-main:active ~ #gm-bubble-layer, #gm-bubble-layer:hover {
+	    transition: all 0 0.4s;
+	    z-index: 10000;
+	    position: absolute;
+	    top: 0;
+	    left:0;
+	    width: 64px;
+	    height: 64px;
+	    border-radius: 50%;
+	}
+
+	#gm-bubble-main:active ~ #gm-bubble-progress-container {
+		transition: box-shadow 0.4s;
+		box-shadow: 0 0 7px #333;
+	}
+
+	#gm-bubble-like svg > path {
+		fill: rgba(255,255,255,0.5);
+	}
+	
+	#gm-bubble-dislike svg > path {
+		fill: rgba(255,255,255,0.5);
+	}
+	
+	[data-rating="liked"] #gm-bubble-like svg > path {
+		fill: white;
+		transition: fill 0.15s ease;
+	}
+
+	[data-rating="disliked"] #gm-bubble-dislike svg > path {
+		fill: white;		
+		transition: fill 0.15s ease;
+	}
+
+	#gm-bubble-progress {
+		margin: 0;
+		padding: 0;
+		top: 0;
+		left: 0;
+		position: initial;		
+	}
+
+	#gm-bubble-label {
+		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	    background: #fff;
+	    display: inline-block;    	    	    
+	    box-sizing: border-box;
+	    position: absolute;	
+	    height: 48px;
+	    margin: 0 -64px;
+	    width: 192px;
+		top: 135px;
+	    opacity: 0;
+	    box-shadow: 0 1px 4px -1px #333;
+	    visibility: hidden;	  
+	    overflow: hidden;
+	    max-width: none;
+	    transform: scale(0.95);	    
+	}
+
+	#gm-bubble-label > div {
+		display: table-cell;
+	}
+
+	#gm-bubble-label > .gm-bubble-album-art-container {
+		width: 48px;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	#gm-bubble-label > .gm-bubble-song-data-container {
+		position: absolute;
+		left: 48px;
+		top: 0;
+		padding: 4px 0;
+	}
+
+	#gm-bubble-content:not([data-state="disabled"]):hover #gm-bubble-label[data-active="true"], #gm-bubble-content.gm-bubble-notify #gm-bubble-label {
+	    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	    opacity: 1;	
+	    visibility: initial;
+	    width: 192px;
+	    transform: translateY(-50px) scale(1);
+	}
+
+	#gm-bubble-label > div > div {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;		
+		line-height: 20px;
+		padding: 0 5px;
+		font-family: 'Segoe UI', 'Helvetica' sans-serif;
+		font-weight: 400;
+		max-width: 144px;
+		box-sizing: border-box;
+		text-align: left;
+	}
+
+	#gm-bubble-song-title {
+		font-size: 13px;
+		color: #333;
+		-webkit-text-stroke-width: 0.5px;
+	}
+
+	#gm-bubble-artist {
+		font-size: 12px;
+		color: #707070;
+	}	
+
+	#gm-bubble-album-art {
+	    width: 48px;
+	    height: 48px;
+	    vertical-align: top;
+	}
+
+	#gm-bubble-content svg {
+		position: absolute;
+		left: 0;
+		right: 0;
+		margin: auto;
+		padding: 3px;
+		
+	}
+
+	#gm-bubble-main > svg {
+		padding: 0;
+		transform: scale(0.66);
+	}
+
+	.gm-bubblecontrol:after {
+		box-shadow: 0 0 0 2px #fff;
+		transition: transform 0.01s 0.3s, opacity 0.3s;
+		transform: scale(.8);
+		opacity: 0;
+		pointer-events: none;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		content: '';
+		box-sizing: content-box;
+	}
+
+	.gm-bubblecontrol:hover:after {
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		transform: scale(1);
+		opacity: 1;
+
+	}
+
+	.gm-bubblecontrol:active:after {
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		transform: scale(1.1);
+	}
+	</style>
+
+
+
+	<div id="gm-bubble-container">
+		<div id="gm-bubble-main" class="gm-bubble">
+			<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="56px" height="56px" viewBox="0 0 300.000000 300.000000" preserveAspectRatio="xMidYMid meet">
+			<metadata>
+			Created by potrace 1.11, written by Peter Selinger 2001-2013
+			</metadata>
+			<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
+			<path fill="#fff" d="M1277 2985 c-634 -103 -1113 -559 -1249 -1189 -18 -83 -22 -134 -22
+			-291 -1 -180 1 -201 37 -385 21 -107 61 -319 90 -470 l53 -275 95 -3 95 -3 11
+			-62 c6 -34 19 -105 29 -157 14 -77 22 -100 45 -122 l27 -28 247 0 c273 0 293
+			4 348 70 57 67 57 62 -47 617 -105 557 -107 563 -186 603 -68 35 -111 27 -325
+			-55 -238 -91 -255 -99 -269 -136 -10 -27 -12 -20 -33 88 -12 65 -25 162 -29
+			216 l-7 97 121 0 c69 0 132 5 146 11 33 15 52 59 59 135 21 215 172 479 360
+			629 553 442 1369 193 1581 -484 15 -46 29 -111 33 -145 7 -76 26 -120 59 -135
+			14 -6 77 -11 146 -11 l121 0 -7 -97 c-4 -54 -17 -151 -29 -216 -21 -108 -23
+			-115 -34 -88 -13 37 -30 45 -268 136 -214 82 -257 90 -325 55 -79 -40 -81 -46
+			-186 -603 -104 -555 -104 -550 -47 -617 55 -66 75 -70 348 -70 l247 0 27 28
+			c23 22 31 45 45 122 10 52 23 123 29 157 l11 62 95 3 95 3 53 275 c29 151 69
+			363 90 470 36 184 38 205 37 385 0 157 -4 208 -22 291 -130 601 -574 1047
+			-1171 1175 -128 27 -398 34 -524 14z"></path>
+			</g>
+			</svg>
+		</div>
+		<div id="gm-bubble-progress-container" class="gm-bubble"><canvas id="gm-bubble-progress" width="64px" height="64px"></canvas></div>
+		<span id="gm-bubble-playPause" class="gm-bubble gm-bubblecontrol" data-rotate="90">
+			<svg id="gm-bubble-play" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48">
+			    <path d="M-838-2232H562v3600H-838z" fill="none"></path>
+			    <path d="M16 10v28l22-14z" fill="#fff"></path>
+			    <path d="M0 0h48v48H0z" fill="none"></path>
+			</svg>
+			<svg id="gm-bubble-pause" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48">
+			    <path d="M12 38h8V10h-8v28zm16-28v28h8V10h-8z" fill="#fff"></path>
+			    <path d="M0 0h48v48H0z" fill="none"></path>
+			</svg>
+		</span>
+		<span id="gm-bubble-next" class="gm-bubble gm-bubblecontrol">
+			<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48">
+			    <path d="M12 36l17-12-17-12v24zm20-24v24h4V12h-4z" fill="#fff"></path>
+			    <path d="M0 0h48v48H0z" fill="none"></path>
+			</svg>
+		</span>
+		<span id="gm-bubble-prev" class="gm-bubble gm-bubblecontrol" data-rotate="-90">
+			<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48">
+			    <path d="M12 12h4v24h-4zm7 12l17 12V12z" fill="#fff"></path>
+			    <path d="M0 0h48v48H0z" fill="none"></path>
+			</svg>
+		</span>
+		<span id="gm-bubble-like" class="gm-bubble gm-bubblecontrol gm-bubble-small">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 48 48">
+			    <path d="M2 42h8v-24h-8v24zm44-22c0-2.21-1.79-4-4-4h-12.63l1.91-9.14c.04-.2.07-.41.07-.63 0-.83-.34-1.58-.88-2.12l-2.13-2.11-13.17 13.17c-.72.73-1.17 1.73-1.17 2.83v20c0 2.21 1.79 4 4 4h18c1.66 0 3.08-1.01 3.68-2.44l6.03-14.1c.18-.46.29-.95.29-1.46v-3.83l-.02-.02.02-.15z" fill="white"></path>
+			</svg>
+		</span>
+		<span id="gm-bubble-dislike" class="gm-bubble gm-bubblecontrol gm-bubble-small">
+			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 32 32">
+				<path d="M20 4h-12c-1.107 0-2.053 0.673-2.453 1.627l-4.020 9.4c-0.12 0.307-0.193 0.633-0.193 0.973v2.553l0.013 0.013-0.013 0.1c0 1.473 1.193 2.667 2.667 2.667h8.42l-1.273 6.093c-0.027 0.133-0.047 0.273-0.047 0.42 0 0.553 0.227 1.053 0.587 1.413l1.42 1.407 8.78-8.78c0.48-0.487 0.78-1.153 0.78-1.887v-13.333c0-1.473-1.193-2.667-2.667-2.667zM25.333 4v16h5.333v-16h-5.333z" fill="white"></path>
+			</svg>
+		</span>		
+	 	<span id="gm-bubble-layer"></span>
+		<span id="gm-bubble-blacklist" class="gm-bubble gm-bubble-button gm-bubblecontrol" title="Blacklist Site">
+			<svg height="16" style="enable-background:new 0 0 28 28;" version="1.1" viewBox="0 0 28 28" width="16" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+				<g>
+					<polygon points="28,22.398 19.594,14 28,5.602 22.398,0 14,8.402 5.598,0 0,5.602 8.398,14 0,22.398 5.598,28 14,19.598 22.398,28" style="fill:#FFFFFF;"></polygon>
+				</g>
+			</svg>
+		</span>
+		<span id="gm-bubble-drag" class="gm-bubble gm-bubble-button gm-bubblecontrol" title="Move">
+			<svg height="16" style="enable-background:new 0 0 32 32;" version="1.1" viewBox="0 0 32 32" width="16" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+				<g>
+					<polygon points="18,20 18,26 22,26 16,32 10,26 14,26 14,20" style="fill:#ffffff;"></polygon>
+					<polygon points="14,12 14,6 10,6 16,0 22,6 18,6 18,12" style="fill:#ffffff;"></polygon>
+					<polygon points="12,18 6,18 6,22 0,16 6,10 6,14 12,14" style="fill:#ffffff;"></polygon>
+					<polygon points="20,14 26,14 26,10 32,16 26,22 26,18 20,18" style="fill:#ffffff;"></polygon>
+				</g>
+				
+			</svg>
+		</span>
+		<span id="gm-bubble-label">
+			<div class="gm-bubble-album-art-container">
+				<img id="gm-bubble-album-art">
+			</div>
+			<div class="gm-bubble-song-data-container">
+				<div id="gm-bubble-song-title"></div>
+				<div id="gm-bubble-artist"></div>
+			</div>
+		</span>
+	</div>
+</div>
+
+</body></html>

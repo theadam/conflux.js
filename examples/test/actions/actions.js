@@ -1,3 +1,9 @@
 var Conflux = require('../../../');
+var api = require('../api');
 
-module.exports = Conflux.createActions(['action']);
+module.exports = function(){
+  return {
+    addValue: Conflux.PromiseAction(api.getPromise),
+    addValue2: Conflux.CallbackAction(api.getValue)
+  };
+};
