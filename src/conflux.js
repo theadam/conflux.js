@@ -3,6 +3,7 @@ var project = require('./utils/project');
 var Bacon = require('baconjs');
 var Stores = require('./stores');
 var combine = require('./utils/combine');
+var Actions = require('./actions');
 
 function Conflux(actions, stores, initialValues){
   if(!(this instanceof Conflux)) return new Conflux(actions, stores, initialValues);
@@ -10,7 +11,7 @@ function Conflux(actions, stores, initialValues){
     this.actions = actions();
   }
   else{
-    this.actions = Conflux.Actions(actions);
+    this.actions = Actions.Actions(actions);
   }
   this.stores = Stores(stores(this.actions), initialValues);
   this.actions = project(this.actions, 'push');

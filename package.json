@@ -4,7 +4,10 @@
   "description": "Flux + Bacon.js",
   "main": "index.js",
   "scripts": {
-    "browserify": "browserify -d examples/test/app.js > examples/test/index.js"
+    "example": "browserify -d examples/test/app.js > examples/test/index.js",
+    "marbles": "browserify -d examples/marbles/app.js > examples/marbles/index.js",
+    "test": "istanbul cover node_modules/.bin/_mocha -- -r 'babel/register' src/**/__tests__/*.js",
+    "coverage": "npm test && open coverage/lcov-report/index.html"
   },
   "author": "Adam Nalisnick",
   "license": "MIT",
@@ -14,11 +17,15 @@
     "react": "^0.12.0"
   },
   "devDependencies": {
-    "babel-eslint": "1.0.14",
+    "babel": "^4.7.16",
+    "babel-eslint": "^2.0.2",
     "babelify": "^5.0.4",
     "browserify": "^7.0.0",
     "es6-promise": "^2.0.1",
-    "eslint": "~0.15.1",
+    "eslint": "^0.17.1",
+    "expect.js": "^0.3.1",
+    "istanbul": "^0.3.8",
+    "mocha": "^2.2.1",
     "ramda": "^0.8.0"
   },
   "browserify": {
