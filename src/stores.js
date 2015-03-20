@@ -1,14 +1,13 @@
-var _ = require('lodash');
+import _ from 'lodash'
+import isBacon from './utils/isBacon'
+import isProperty from './utils/isProperty'
+import wrapProperty from './utils/wrapProperty'
 
-var isBacon = require('./utils/isBacon');
-var isProperty = require('./utils/isProperty');
-var wrapProperty = require('./utils/wrapProperty');
-
-function Stores(streams, initialValues){
-  var models = {};
-  for(var i in streams){
+export default function Stores(streams, initialValues){
+  let models = {};
+  for(let i in streams){
     let stream = streams[i];
-    var value = _.isPlainObject(initialValues) ? initialValues[i] : undefined;
+    let value = _.isPlainObject(initialValues) ? initialValues[i] : undefined;
 
     if(_.isFunction(stream)){
       stream = stream(value);
@@ -25,5 +24,3 @@ function Stores(streams, initialValues){
   }
   return models;
 }
-
-module.exports = Stores;
