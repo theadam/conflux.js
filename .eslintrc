@@ -16,7 +16,10 @@
     "semi": [2, "always"],
     "no-mixed-requires": 0,
     "valid-jsdoc": 0,
-    "no-use-before-define": [2, "nofunc"]
+    "no-use-before-define": [2, "nofunc"],
+
+    // Because of a bug in eslint
+    "no-unused-vars": 0
   },
   "env": {
     "node": true,

@@ -9,7 +9,7 @@ export default function Stores(streams, initialValues){
     let stream = streams[i];
     let value = _.isPlainObject(initialValues) ? initialValues[i] : undefined;
 
-    if(_.isFunction(stream)){
+    if(stream instanceof Function){
       stream = stream(value);
     }
     if(isBacon(stream)){

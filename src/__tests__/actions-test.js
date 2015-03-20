@@ -1,6 +1,7 @@
 import {Actions, Action, PromiseAction, CallbackAction} from '../actions';
 import Bacon from 'baconjs'
 import expect from 'expect.js'
+import isAction from './support/isAction'
 
 describe('Action', () => {
 
@@ -135,12 +136,6 @@ describe('Action', () => {
         return Actions[key](Actions, Array.prototype.slice.call(arguments));
       }
 
-      function isAction(action){
-        expect(action).to.be.a(Bacon.Observable);
-        expect(action.plug).to.be.a(Function);
-        expect(action.push).to.be.a(Function);
-        expect(action.waiting).to.be.a(Bacon.Property);
-      }
       describe(key, () => {
         it('should create action with string', () => {
           let actions = createActions('test');
@@ -156,21 +151,14 @@ describe('Action', () => {
           isAction(actions.two);
         });
 
-        it('should return a regular action as-is', () => {
-          let actions = createActions(Action());
-
-          isAction(actions);
-        });
-
         it('should handle objects', () => {
-          let actions = createActions({test: 'one', test2: Action()});
+          let actions = createActions({test: 'one'});
 
           isAction(actions.test.one);
-          isAction(actions.test2);
         });
 
         it('should handle a mix', () => {
-          let actions = createActions({test: 'one', test2: Action()}, 'test3', {test4: ['sub1', 'sub2', 'sub3']});
+          let actions = createActions({test: 'one'}, ['test2'], 'test3', {test4: ['sub1', 'sub2', 'sub3']});
 
           isAction(actions.test.one);
           isAction(actions.test2);

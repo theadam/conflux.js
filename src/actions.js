@@ -35,23 +35,16 @@ function _AsyncAction(func, baconWrapper){
   return Action((bus) => bus.map(func).flatMapLatest(baconWrapper));
 }
 
-function _createActionsInArray(descriptor){
-  if(isBacon(descriptor)) throw new Error('Cannot create an action from an Observable in an Array.  No key can be inferred.');
-  return _createActions(descriptor);
-}
-
 function _createActions(descriptor){
+  if(isBacon(descriptor)) throw new Error('Bacon Observables are not allowed while create Actions automatically.  Use a function to create Actions manually.');
   if(typeof descriptor === 'string'){
     let obj = {};
     obj[descriptor] = Action();
     return obj;
   }
-  else if (isBacon(descriptor)){
-    return descriptor;
-  }
   else if(_.isArray(descriptor)){
     if(descriptor.length > 1){
-      return _.merge.apply(_, _.map(descriptor, _createActionsInArray));
+      return _.merge.apply(_, _.map(descriptor, _createActions));
     }
     else if(descriptor.length === 1){
       return _createActions(descriptor[0]);
