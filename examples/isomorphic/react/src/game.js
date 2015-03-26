@@ -14,7 +14,7 @@ var Game = React.createClass({
       var currentGame = flux.stores.game.results.value;
       if(currentGame && String(currentGame.id) === state.params.game_id) return Promise.resolve();
       var promise = flux.stores.game.results.changes().firstToPromise();
-      flux.actions.loadGame(state.params.game_id);
+      flux.actions.loadGame.push(state.params.game_id);
       return promise;
     }
   },

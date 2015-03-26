@@ -1,4 +1,6 @@
 import Bacon from 'baconjs'
+import Conflux from '../conflux'
+Conflux.Bacon = Bacon;
 import Stores from '../stores'
 import expect from 'expect.js'
 import R from 'ramda'

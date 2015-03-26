@@ -1,181 +1,127 @@
-import {Actions, Action, PromiseAction, CallbackAction} from '../actions';
 import Bacon from 'baconjs'
 import expect from 'expect.js'
-import isAction from './support/isAction'
+import Conflux from '../conflux'
+Conflux.Bacon = Bacon;
+
+import * as Actions from '../actions';
+
+import validAction from './support/validAction'
 
 describe('Action', () => {
+  describe('createActions', () => {
+    it('should return action for a bus', (done) => {
+      let action = Actions.createActions(new Bacon.Bus());
 
-  describe('Default Action', () => {
-    let action;
-
-    beforeEach(() => {
-      action = Action();
-    });
-
-    it('should return a bacon stream', () => {
-      expect(action).to.be.a(Bacon.Observable);
-      expect(action).to.be.a(Bacon.Bus);
-    });
-
-    it('should be synchronous', () => {
-      let value;
-      let unsub = action.onValue(() => value = 1);
-      action.push();
-      expect(value).to.be(1);
-      unsub();
-    });
-
-    it('should have a waiting property', () => {
-      let waiting = action.waiting;
-      expect(waiting).to.be.a(Bacon.Property);
-      let value;
-
-      let unsub = waiting.onValue((isWaiting) => {
-        value = 1;
-        expect(isWaiting).to.be(false);
-      });
-      expect(value).to.be(1);
-      unsub();
-
-      action.push();
-
-      unsub = waiting.onValue((isWaiting) => {
-        value = 2;
-        expect(isWaiting).to.be(false);
-      });
-      expect(value).to.be(2);
-      unsub();
-    });
-
-    it('push method should be bound', () => {
-      let push = action.push;
-
-      let value;
-      let unsub = action.onValue(() => value = 1);
-      push();
-      expect(value).to.be(1);
-      unsub();
-    });
-
-    it('plug method should be bound', () => {
-      let plug = action.plug;
-      let bus = new Bacon.Bus();
-      plug(bus);
-
-      let value;
-      let unsub = action.onValue(() => value = 1);
-      bus.push();
-      expect(value).to.be(1);
-      unsub();
-    });
-  });
-
-  describe('With Mapper', () => {
-    it('should fail if mapper doesnt return an observable', () => {
-      expect(Action).withArgs(() => 1).to.throwException();
-    });
-
-    it('should allow mapping values', (done) => {
-      let action = Action((stream) => stream.map((x) => x + 1));
-      action.onValue((val) => {
+      validAction(action);
+      action.stream.onValue((val) => {
         expect(val).to.be(2);
         done();
       });
-      action.push(1);
+      action.bus.push(2);
+    });
+
+    it('should return action for a function', (done) => {
+      let action = Actions.createActions((bus) => bus.map((val) => val * val));
+
+      validAction(action);
+      action.stream.onValue((val) => {
+        expect(val).to.be(4);
+        done();
+      });
+      action.bus.push(2);
+    });
+
+    it('should return action for nested action', (done) => {
+      let actions = Actions.createActions({
+        nested: {
+          action: (bus) => bus.map((val) => val * val)
+        },
+        other: {
+          nested: {
+            action: new Bacon.Bus()
+          }
+        }
+      });
+
+      validAction(actions.nested.action);
+      validAction(actions.other.nested.action);
+      actions.nested.action.stream.onValue((val) => {
+        expect(val).to.be(4);
+
+        actions.other.nested.action.stream.onValue((val) => {
+          expect(val).to.be(2);
+          done();
+        });
+        actions.other.nested.action.bus.push(2);
+
+      });
+      actions.nested.action.bus.push(2);
+
+    });
+
+    it('should handle async action/waiting', (done) => {
+      let action = Actions.createActions((bus) => bus.delay(1).map((val) => val * val));
+
+      let i = 0;
+      Bacon.combineAsArray(action.waiting, action.stream.toProperty(undefined)).onValue(([isLoading, val]) => {
+        if(i === 0){
+          expect(isLoading).to.be(false);
+          expect(val).to.be(undefined);
+        }
+        else if(i === 1){
+          expect(isLoading).to.be(true);
+          expect(val).to.be(undefined);
+        }
+        else if(i === 2){
+          expect(isLoading).to.be(false);
+          expect(val).to.be(4);
+          done();
+        }
+        else{
+          throw new Error('Combined stream changed too many times.');
+        }
+        i += 1;
+      });
+
+      action.bus.push(2);
     });
   });
 
-  describe('Promise Action', () => {
-    it('shouldnt accept more than 1 arg', () => {
-      expect(PromiseAction).withArgs((a, b) => {}).to.throwException();
+  describe('fromDescriptor', () => {
+    it('should create action with string', () => {
+      let actions = Actions.fromDescriptor('test');
+
+      validAction(actions.test);
     });
 
-    it('should resolve promises', (done) => {
-      let action = PromiseAction((val) => Promise.resolve(val));
+    it('should create action with multiple strings', () => {
+      let actions = Actions.fromDescriptor(['test', 'one', 'two']);
 
-      action.onValue((val) => {
-        expect(val).to.be(5);
-        done();
-      });
-
-      action.push(5);
-    });
-  });
-
-  describe('Callback Action', () => {
-    it('shouldnt more than 2 args', () => {
-      expect(CallbackAction).withArgs((a, b, c) => {}).to.throwException();
+      validAction(actions.test);
+      validAction(actions.one);
+      validAction(actions.two);
     });
 
-    it('should resolve callbacks', (done) => {
-      let action = CallbackAction((val, cb) => cb(null, val));
+    it('should handle objects', () => {
+      let actions = Actions.fromDescriptor({test: 'one'});
 
-      action.onValue((val) => {
-        expect(val).to.be(5);
-        done();
-      });
-
-      action.push(5);
+      validAction(actions.test.one);
     });
 
-    it('should resolve single arg callbacks', (done) => {
-      let action = CallbackAction((cb) => cb(null, 5));
+    it('should handle a mix', () => {
+      let actions = Actions.fromDescriptor([{test: 'one'}, ['test2'], 'test3', {test4: ['sub1', 'sub2', 'sub3']}]);
 
-      action.onValue((val) => {
-        expect(val).to.be(5);
-        done();
-      });
-
-      action.push(7);
+      validAction(actions.test.one);
+      validAction(actions.test2);
+      validAction(actions.test3);
+      validAction(actions.test4.sub1);
+      validAction(actions.test4.sub2);
+      validAction(actions.test4.sub3);
     });
-  });
 
-  describe('Actions', () => {
-    function testActions(key){
-      function createActions(){
-        return Actions[key](Actions, Array.prototype.slice.call(arguments));
-      }
-
-      describe(key, () => {
-        it('should create action with string', () => {
-          let actions = createActions('test');
-
-          isAction(actions.test);
-        });
-
-        it('should create action with multiple strings', () => {
-          let actions = createActions('test', 'one', 'two');
-
-          isAction(actions.test);
-          isAction(actions.one);
-          isAction(actions.two);
-        });
-
-        it('should handle objects', () => {
-          let actions = createActions({test: 'one'});
-
-          isAction(actions.test.one);
-        });
-
-        it('should handle a mix', () => {
-          let actions = createActions({test: 'one'}, ['test2'], 'test3', {test4: ['sub1', 'sub2', 'sub3']});
-
-          isAction(actions.test.one);
-          isAction(actions.test2);
-          isAction(actions.test3);
-          isAction(actions.test4.sub1);
-          isAction(actions.test4.sub2);
-          isAction(actions.test4.sub3);
-        });
-
-        it('should error when there are observables in an array', () => {
-          expect(createActions).withArgs([Action(), Action()]).to.throwException();
-        });
-      });
-    }
-
-    testActions('call'); // Tests with an arg of an array
-    testActions('apply'); // Tests with a number of arguments
+    it('should error when there are observables in an array', () => {
+      expect(Actions.fromDescriptor).withArgs([new Bacon.Bus(), new Bacon.Bus()]).to.throwException();
+    });
   });
 
 });

@@ -7,7 +7,7 @@ module.exports = React.createClass({
     };
   },
   handleClick: function(action){
-    action(this.state.count);
+    action.push(this.state.count);
     this.setState({count: this.state.count + 1});
   },
   render: function(){

@@ -1,9 +1,10 @@
-var Conflux = require('../../../');
 var api = require('../api');
+var Bacon = require('baconjs');
+var R = require('ramda');
 
 module.exports = function(){
   return {
-    addValue: Conflux.PromiseAction(api.getPromise),
-    addValue2: Conflux.CallbackAction(api.getValue)
+    addValue: (bus) => bus.map(api.getPromise).flatMapLatest(Bacon.fromPromise),
+    addValue2: (bus) => bus.map(R.curry(api.getValue)).flatMapLatest(Bacon.fromNodeCallback)
   };
 };

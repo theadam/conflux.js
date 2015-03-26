@@ -1,8 +1,10 @@
-import Conflux from '../conflux'
-import expect from 'expect.js'
-import isAction from './support/isAction'
-import {Property} from 'baconjs'
 import Bacon from 'baconjs'
+import Conflux from '../conflux'
+import ConfluxWrapper from '../../'
+Conflux.Bacon = Bacon;
+import expect from 'expect.js'
+import validAction from './support/validAction'
+import {Property} from 'baconjs'
 import {Action} from '../actions'
 import * as Actions from '../actions'
 import combine from '../utils/combine'
@@ -16,12 +18,12 @@ function createConflux(actions, stores, init){
 }
 
 var actionString = 'test';
-var actionFunction = () => {return {test: Action()}; };
+var actionFunction = () => {return {test: new Bacon.Bus()}; };
 var storeFunction = (actions) => {return {test: actions.test}; };
 
 function isValidFlux(flux, val){
   expect(flux).to.be.a(Conflux);
-  expect(flux.actions.test).to.be.a(Function);
+  expect(flux.actions.test).to.be.a(Bacon.Bus);
   expect(flux.stores.test).to.be.a(Property);
   expect(flux.stores.test.value).to.be(val);
 }
@@ -49,7 +51,7 @@ describe('Conflux', function(){
     var flux = Conflux(actionFunction, storeFunction, {test: 2});
 
     isValidFlux(flux, 2);
-    flux.actions.test(3);
+    flux.actions.test.push(3);
     isValidFlux(flux, 3);
   });
 
@@ -78,14 +80,5 @@ describe('Conflux', function(){
         }
       }
     });
-  });
-
-  it('should have proper exports', () => {
-    // All action keys
-    for(let key of Object.keys(Actions)){
-      expect(Actions[key]).to.be(Conflux[key]);
-    }
-    expect(Conflux.Bacon).to.be(Bacon);
-    expect(Conflux.combine).to.be(combine);
   });
 });

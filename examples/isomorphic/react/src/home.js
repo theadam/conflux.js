@@ -7,6 +7,6 @@ var Home = React.createClass({
     return (<DocumentTitle title="React Isomorphic Video Game Search"></DocumentTitle>);
   }
 
-})
+});
 
 module.exports = Home;

@@ -1,5 +1,6 @@
 var React = require('react');
 var Router = require('react-router');
+var Bacon = require('baconjs');
 
 var appConfig = require('./react/src/config');
 
@@ -54,10 +55,10 @@ app.use(function(req, res, next) {
     return res.redirect('/search/' + req.query.q);
   }
 
-  var flux = Conflux(actions, stores);
+  var flux = Conflux.with(Bacon).create(actions, stores);
 
   Router.run(App.routes, req.url, function(Handler, state){
-    flux.actions.setRouteState(state);
+    flux.actions.setRouteState.push(state);
 
     initializeRoutes(state.routes, state, flux)
       .then(() => {

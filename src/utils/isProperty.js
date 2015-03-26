@@ -1,5 +1,5 @@
-var Bacon = require('baconjs');
+var Conflux = require('../conflux');
 
-module.exports = function isProperty(testee){
-  return testee instanceof Bacon.Property;
+export default function isProperty(testee){
+  return testee instanceof Conflux.Bacon.Property;
 };

@@ -1,5 +1,5 @@
-var Bacon = require('baconjs');
+import Conflux from '../conflux'
 
-module.exports = function isBacon(testee){
-  return testee instanceof Bacon.Observable;
+export default function isBacon(testee){
+  return testee instanceof Conflux.Bacon.Observable;
 };

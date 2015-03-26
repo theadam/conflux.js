@@ -1,6 +1,7 @@
 var React = require('react/addons');
 var Router = require('react-router');
 var DocumentTitle = require('react-document-title');
+var Bacon = require('baconjs');
 
 var Search = require('./search');
 var SearchResults = require('./searchResults');
@@ -69,17 +70,17 @@ if (typeof window !== 'undefined') {
   window.onload = function() {
     var serverState = Global.get(stateKey);
 
-    var flux = Conflux(actions, stores, serverState);
+    var flux = Conflux.with(Bacon).create(actions, stores, serverState);
 
     var router = Router.create({
       routes,
       location: Router.HistoryLocation
     });
 
-    flux.actions.setRouter(router);
+    flux.actions.setRouter.push(router);
 
     router.run(function(Handler, state){
-      flux.actions.setRouteState(state);
+      flux.actions.setRouteState.push(state);
 
 
       initializeRoutes(state.routes, state, flux)

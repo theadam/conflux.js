@@ -1,18 +1,17 @@
 var R = require('ramda');
 
-var Conflux = require('../../../../../');
-var Bacon = Conflux.Bacon;
+var Bacon = require('baconjs');
 
 var api = require('../api');
 
 module.exports = function createActions(){
-  var setRouter = Conflux.Action();
+  var setRouter = new Bacon.Bus();
   var router = setRouter.toProperty();
 
-  var routeTo = Conflux.Action((bus) => bus.debounce(500));
+  var routeTo = new Bacon.Bus();
 
   // side effect for changing route
-  var routeRouter = routeTo
+  var routeRouter = routeTo.debounce(400)
     .combine(router, (route, router) => {return {route, router}; });
 
   routeRouter.onValue(({route, router}) => {
@@ -20,11 +19,10 @@ module.exports = function createActions(){
   });
 
   return {
-    loadGame: Conflux.PromiseAction(R.memoize(api.loadGameData)),
-    //loadGame: Conflux.Action((bus) => bus.map(R.memoize(api.loadGameData)).flatMapLatest(Bacon.fromPromise)),
-    searchUpdate: Conflux.PromiseAction(api.search),
+    loadGame: (bus) => bus.map(R.memoize(api.loadGameData)).flatMapLatest(Bacon.fromPromise),
+    searchUpdate: (bus) => bus.map(api.search).flatMapLatest(Bacon.fromPromise),
     setRouter: setRouter,
     routeTo: routeTo,
-    setRouteState: Conflux.Action()
+    setRouteState: new Bacon.Bus()
   };
 };

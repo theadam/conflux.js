@@ -1,33 +1,40 @@
 import _ from 'lodash'
-import Bacon from 'baconjs'
 
 import Stores from './stores'
 import * as Actions from './actions'
 import combine from './utils/combine'
 import mapLeaves from './utils/mapLeaves'
-import functionizeAction from './utils/functionizeAction'
+import isAction from './utils/isAction'
 
 // Not an es6 to allow for 'new'-less instantiation
 export default function Conflux(actions, stores, initialValues){
   if(!(this instanceof Conflux)) return new Conflux(actions, stores, initialValues);
   if(actions instanceof Function){
-    this.actions = actions();
+    this.actions = Actions.createActions(actions());
   }
   else{
-    this.actions = Actions.Actions(actions);
+    this.actions = Actions.fromDescriptor(actions);
   }
-  this.stores = Stores(stores(this.actions), initialValues);
+  // Expose all the streams from the actions
+  let streamsForStores = mapLeaves(this.actions, isAction, (action) => {
+    let stream = action.stream;
+    stream.bus = action.bus;
+    stream.waiting = action.waiting;
+    return stream;
+  });
 
-  // Leaves are actions, but we want to only show their push functions
-  this.actions = mapLeaves(this.actions, functionizeAction);
+  this.stores = Stores(stores(streamsForStores), initialValues);
+
+  // Expose all the busses from the actions
+  this.actions = mapLeaves(this.actions, isAction, (action) => {
+    let bus = action.bus;
+    bus.stream = action.stream;
+    bus.waiting = action.waiting;
+    return bus;
+  });
+
 }
 
-Conflux.combine = combine;
-
 Conflux.prototype.serialize = function(){
-  return Conflux.combine(this.stores).value;
+  return combine(this.stores).value;
 };
-
-_.merge(Conflux, Actions);
-
-Conflux.Bacon = Bacon;

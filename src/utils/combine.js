@@ -1,6 +1,6 @@
-var Bacon = require('baconjs');
-var wrapProperty = require('./wrapProperty');
+import Conflux from '../conflux'
+import wrapProperty from './wrapProperty'
 
-module.exports = function combineStores(stores){
-  return wrapProperty(Bacon.combineTemplate(stores));
-};
+export default function combine(stores){
+  return wrapProperty(Conflux.Bacon.combineTemplate(stores));
+}
