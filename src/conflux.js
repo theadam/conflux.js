@@ -38,3 +38,12 @@ export default function Conflux(actions, stores, initialValues){
 Conflux.prototype.serialize = function(){
   return combine(this.stores).value;
 };
+
+let bacon;
+Object.defineProperty(Conflux, 'Bacon', {
+  get: () => {
+    if(!bacon) throw new Error('Use Conflux.with to set the bacon instance');
+    return bacon;
+  },
+  set: (lib) => bacon = lib
+});

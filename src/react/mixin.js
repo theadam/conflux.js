@@ -30,7 +30,7 @@ function ConfluxMixin() {
     },
 
     listenTo(){
-      var stores = arguments.length > 0 ? Array.prototype.slice.call(arguments) : arguments[0];
+      var stores = arguments.length > 1 ? Array.prototype.slice.call(arguments) : arguments[0];
       if(stores.length > 0){
         var model = getModel(this.flux.stores, stores);
         this._listeners.push(
@@ -41,11 +41,24 @@ function ConfluxMixin() {
       return null;
     },
 
+    eventStream(name){
+      let bus = new Conflux.Bacon.Bus();
+      this[name] = (event) => bus.push(event);
+      return bus;
+    },
+
+    connectToState(key, stream){
+      let disconnect = stream.onValue((val) => this.setState({[key]: val}));
+      this._listeners.push(disconnect);
+    },
+
     initialize(){
       this._listeners = [];
       this.flux = this.getFlux();
-      this.actions = this.flux.actions;
-      this.stores = this.flux.stores;
+      if(this.flux){
+        this.actions = this.flux.actions;
+        this.stores = this.flux.stores;
+      }
     },
 
     getInitialState(){
