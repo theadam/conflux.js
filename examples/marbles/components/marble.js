@@ -1,9 +1,11 @@
-import React from 'react'
+import React from 'react/addons'
 import _ from 'lodash'
 import Conflux from '../../../'
 import Bacon from 'baconjs'
 
 import prefix from './utils/prefix'
+
+const PureRenderMixin = React.addons.PureRenderMixin;
 
 function getClientX(e) {
   var position = (e.touches && e.touches[0]) || e;
@@ -11,7 +13,7 @@ function getClientX(e) {
 }
 
 export default React.createClass({
-  mixins: [Conflux.Mixin()],
+  mixins: [Conflux.Mixin(), PureRenderMixin],
 
   componentWillMount(){
     if(!this.props.onDrag) return this.setState({isGrabbed: false});

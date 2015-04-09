@@ -4,15 +4,15 @@ var combine = require('../../utils/combine');
 
 module.exports = function getModel(stores, descriptor){
   if(_.isString(descriptor)){
-    stores = stores[descriptor];
+    return combine({[descriptor]: stores[descriptor]});
   }
-  if(isBacon(stores)){
-    return stores;
+  if(_.isArray(descriptor)){
+    return _.merge.apply(_, _.map(descriptor, (part) => getModel(stores, part)));
   }
-  if(_.isArray(stores)){
-    return _.merge.apply(_, _.map(stores, getModel));
+  else if(_.isPlainObject(descriptor)){
+    return _.mapValues(descriptor, (value, key) => getModel(stores[key], value));
   }
   else{
-    return combine(stores);
+    throw new Error('Unable to parse descriptor ' + descriptor);
   }
 };

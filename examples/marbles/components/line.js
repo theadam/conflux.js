@@ -1,12 +1,13 @@
-import React from 'react'
+import React from 'react/addons'
 import Marble from './marble'
 import _ from 'lodash'
 import Conflux from '../../../'
+const PureRenderMixin = React.addons.PureRenderMixin;
 
 const colors = ['#EE7777', '#7777FF', '#77EE77', '#DDDD77'];
 
 export default React.createClass({
-  mixins: [Conflux.Mixin()],
+  mixins: [Conflux.Mixin(), PureRenderMixin],
 
   getDefaultProps(){
     return {
