@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import Conflux from '../../../'
 import Bacon from 'baconjs'
 
@@ -95,7 +96,7 @@ export default React.createClass({
     return (
       <div style={this.style()} onMouseDown={this.props.onDrag ? this.handleDown : undefined}>
         <svg style={this.svgStyle()} viewBox="0 0 1 1">
-          <circle style={this.circleStyle()} cx={0.5} cy={0.5} r={0.48} />
+          <circle style={_.merge(this.circleStyle(), this.props.style)} cx={0.5} cy={0.5} r={0.48} />
         </svg>
         <div style={this.spacerStyle()} />
         <span style={this.textStyle()}>{this.props.value}</span>

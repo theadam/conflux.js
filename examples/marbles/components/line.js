@@ -3,6 +3,7 @@ import Marble from './marble'
 import _ from 'lodash'
 import Conflux from '../../../'
 
+const colors = ['#EE7777', '#7777FF', '#77EE77', '#DDDD77'];
 
 export default React.createClass({
   mixins: [Conflux.Mixin()],
@@ -14,16 +15,24 @@ export default React.createClass({
     };
   },
 
-  handleDrag(index, event){
+  getEventTime(event){
     // Map page coordinates to "local" coordinates
     var rect = this.refs.line.getDOMNode().getBoundingClientRect();
-    let finalLocation = (event.clientX + event.offset);
-    let time = ((finalLocation - rect.left) / (rect.right - rect.left)) * 100;
+    let finalLocation = (event.clientX + (event.offset || 0));
+    return Math.round(((finalLocation - rect.left) / (rect.right - rect.left)) * 100);
+  },
+
+  handleDoubleClick(event){
+    let time = this.getEventTime(event);
+    console.log(time);
+  },
+
+  handleDrag(index, event){
+    let time = this.getEventTime(event);
     if(time >= 0 && time <= 100){
       let line = this.props.data;
-      let marble = line.find(input => input.index === index);
-      marble.time = Math.round(time);
-      this.actions.changeInput.push([this.props.index, line]);
+      let newLine = line.get(index);
+      this.actions.changeInput.push([this.props.index, index, newLine.set('time', time)]);
     }
   },
 
@@ -65,23 +74,29 @@ export default React.createClass({
     };
   },
 
+  getColor(x){
+    var index = Math.abs(x) % colors.length;
+    return colors[index];
+  },
+
   render(){
     let marbles = this.props.data
-      .map((input) => {
+      .map((input, index) => {
         return (
-          <div style={this.marbleStyle(input.time)} key={input.id}>
+          <div style={this.marbleStyle(input.get('time'))} key={index}>
             <Marble
-              value={input.value}
-              onDrag={this.props.draggable ? (event) => this.handleDrag(input.index, event) : undefined} />
+              style={{fill: this.getColor(input.remove('time').set('index', index).hashCode())}}
+              value={input.get('value')}
+              onDrag={this.props.draggable ? (event) => this.handleDrag(index, event) : undefined} />
           </div>
         );
       });
 
-    return (<div style={this.style()}>
+    return (<div style={this.style()} onDoubleClick={this.handleDoubleClick}>
         <svg style={this.svgStyle()} viewBox="0 0 100 1" preserveAspectRatio="xMidYMid meet">
             <line ref="line" x1={0} y1={0.5} x2={100} y2={0.5} style={this.lineStyle()}/>
         </svg>
-        {marbles}
+        {marbles.toArray()}
       </div>
     );
   }
