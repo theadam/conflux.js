@@ -5,6 +5,11 @@ import Bacon from 'baconjs'
 
 import prefix from './utils/prefix'
 
+function getClientX(e) {
+  var position = (e.touches && e.touches[0]) || e;
+  return position.clientX;
+}
+
 export default React.createClass({
   mixins: [Conflux.Mixin()],
 
@@ -22,7 +27,7 @@ export default React.createClass({
       .map((rect) => Math.round((rect.left + rect.right) / 2))
       .toProperty();
 
-    let clientX = mouseDowns.map('.clientX');
+    let clientX = mouseDowns.map(getClientX);
 
     let offset = elementCenter.combine(clientX, (center, click) => center - click).toProperty();
 
@@ -37,8 +42,10 @@ export default React.createClass({
 
     drags
       .combine(offset.sampledBy(drags), (e, offset) => {
-        e.offset = offset;
-        return e;
+        return {
+          clientX: getClientX(e),
+          offset
+        };
       })
       .onValue(this.props.onDrag);
   },
@@ -93,8 +100,9 @@ export default React.createClass({
   },
 
   render(){
+    var handleDown = this.props.onDrag ? this.handleDown : undefined;
     return (
-      <div style={this.style()} onMouseDown={this.props.onDrag ? this.handleDown : undefined}>
+      <div style={this.style()} onMouseDown={handleDown} onTouchStart={handleDown}>
         <svg style={this.svgStyle()} viewBox="0 0 1 1">
           <circle style={_.merge(this.circleStyle(), this.props.style)} cx={0.5} cy={0.5} r={0.48} />
         </svg>

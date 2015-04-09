@@ -27,8 +27,10 @@ export default function(actions){
     .map(Immutable.fromJS);
 
   return {
-    mouseMoves: Bacon.fromEvent(window, 'mousemove').filter(e => e),
-    mouseUps: Bacon.fromEvent(window, 'mouseup').filter(e => e),
+    mouseMoves: Bacon.fromEvent(window, 'mousemove')
+      .merge(Bacon.fromEvent(window, 'touchmove')),
+    mouseUps: Bacon.fromEvent(window, 'mouseup')
+      .merge(Bacon.fromEvent(window, 'touchend')),
     diagram: {
       inputs,
       display,
