@@ -4,7 +4,7 @@ import _ from 'lodash'
 import isBacon from './utils/isBacon'
 
 export function createActions(actions){
-  if(actions instanceof Conflux.Bacon.Bus){
+  if(actions instanceof Conflux.Bacon.Observable){
     return {bus: actions, stream: actions, waiting: Conflux.Bacon.constant(false)};
   }
   else if(actions instanceof Function){

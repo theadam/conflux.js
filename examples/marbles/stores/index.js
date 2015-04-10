@@ -2,26 +2,31 @@ import Bacon from 'baconjs'
 import {collectWithTimes, createStream} from './utils'
 import _ from 'lodash'
 import Immutable from 'immutable'
+import descriptorFromPath, {descriptors, defaultPath} from './utils/descriptors'
 
 const mapMarble = fn => inputs => inputs.map(input => input.map(fn));
 
-export default function(actions){
-  let display = actions.evaluate.map((descriptor) => descriptor.get('display'));
-  let fn = actions.evaluate.map((descriptor) => descriptor.get('fn'));
+export {defaultPath};
 
-  // input in the form of [[{time..., value...., index....}, ...], ...]
+export default function(actions){
+
+  let descriptor = actions.showDiagram.map(descriptorFromPath).skipDuplicates();
+
+  let display = descriptor.map(descriptor => descriptor.get('display'));
+  let fn = descriptor.map(descriptor => descriptor.get('fn'));
+
   let inputs = Bacon.update(undefined,
-    actions.evaluate, (prev, descriptor) => descriptor.get('inputs'),
-    actions.changeInput, (prev, [inputIndex, marbleIndex, newMarble]) => prev.set(inputIndex, prev.get(inputIndex).set(marbleIndex, newMarble))
+    descriptor, (prev, descriptor) => descriptor.get('inputs'),
+    actions.changeInput, (prev, [inputIndex, marbleIndex, newMarble]) => prev.setIn([inputIndex, marbleIndex], newMarble)
   ).changes();
 
   // stream that emits an array of streams that emit each descriptor at the descriptors listed time
   let inputStreams = inputs
-    .map(inputs => inputs.toJS().map(createStream));
+    .map(inputs => inputs.map(createStream));
 
   let output = inputStreams
     .combine(fn, (streams, fn) => [streams, fn])
-    .map(([streams, fn]) => fn.apply(fn, streams))
+    .map(([streams, fn]) => fn.apply(fn, streams.toArray()))
     .flatMap((stream) => Bacon.fromCallback(collectWithTimes, () => stream))
     .toProperty([])
     .map(Immutable.fromJS);
@@ -36,6 +41,7 @@ export default function(actions){
       display,
       fn,
       output
-    }
+    },
+    descriptors: Bacon.constant(descriptors)
   };
 };

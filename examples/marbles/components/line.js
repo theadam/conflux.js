@@ -23,11 +23,6 @@ export default React.createClass({
     return Math.round(((finalLocation - rect.left) / (rect.right - rect.left)) * 100);
   },
 
-  handleDoubleClick(event){
-    let time = this.getEventTime(event);
-    console.log(time);
-  },
-
   handleDrag(index, event){
     let time = this.getEventTime(event);
     if(time >= 0 && time <= 100){
@@ -82,22 +77,23 @@ export default React.createClass({
 
   render(){
     let marbles = this.props.data
+      .toArray()
       .map((input, index) => {
         return (
           <div style={this.marbleStyle(input.get('time'))} key={index}>
             <Marble
-              style={{fill: this.getColor(input.remove('time').set('index', index).hashCode())}}
+              style={{fill: this.getColor(input.remove('time').hashCode())}}
               value={input.get('value')}
               onDrag={this.props.draggable ? (event) => this.handleDrag(index, event) : undefined} />
           </div>
         );
       });
 
-    return (<div style={this.style()} onDoubleClick={this.handleDoubleClick}>
+    return (<div style={this.style()}>
         <svg style={this.svgStyle()} viewBox="0 0 100 1" preserveAspectRatio="xMidYMid meet">
             <line ref="line" x1={0} y1={0.5} x2={100} y2={0.5} style={this.lineStyle()}/>
         </svg>
-        {marbles.toArray()}
+        {marbles}
       </div>
     );
   }

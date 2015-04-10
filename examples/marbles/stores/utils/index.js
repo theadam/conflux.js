@@ -7,16 +7,16 @@ export function collect(srcFunc, done){
   let oldScheduler = Bacon.scheduler;
   Bacon.scheduler = tickScheduler;
   let src = srcFunc();
-  let sub = () => (event) => {
+  let sub = (event) => {
     if(event.isEnd()) {
       Bacon.scheduler = oldScheduler;
       return done(results);
     }
     results.push(event.value());
-    src.subscribe(sub());
+    src.subscribe(sub);
     return Bacon.noMore;
   };
-  src.subscribe(sub());
+  src.subscribe(sub);
 }
 
 export function collectWithTimes(src, done){
@@ -24,6 +24,8 @@ export function collectWithTimes(src, done){
 }
 
 export function createStream(marbles){
-  var streams = marbles.map((m) => Bacon.later(m.time, m.value));
+  var streams = marbles.toArray().map((m) => {
+    return Bacon.later(m.get('time'), m.get('value'));
+  });
   return Bacon.mergeAll(streams);
 }

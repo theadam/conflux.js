@@ -9,7 +9,7 @@ export default React.createClass({
 
   render(){
     return (
-      <div>
+      <div style={this.props.style}>
         <Inputs inputs={this.state.diagram.inputs} />
         <Display display={this.state.diagram.display} />
         <Output output={this.state.diagram.output} />
