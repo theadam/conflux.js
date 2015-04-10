@@ -27,7 +27,8 @@ export default React.createClass({
 
   diagramStyle(){
     return {
-      marginLeft: menuWidth
+      marginLeft: menuWidth + 20,
+      marginRight: 20
     };
   },
 
