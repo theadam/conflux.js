@@ -18,15 +18,14 @@ export default function(actions){
   let inputs = Bacon.update(undefined,
     descriptor, (prev, descriptor) => descriptor.get('inputs'),
     actions.changeInput, (prev, [inputIndex, marbleIndex, newMarble]) => prev.setIn([inputIndex, marbleIndex], newMarble)
-  ).changes();
+  );
 
   // stream that emits an array of streams that emit each descriptor at the descriptors listed time
   let inputStreams = inputs
     .map(inputs => inputs.map(createStream));
 
   let output = inputStreams
-    .combine(fn, (streams, fn) => [streams, fn])
-    .map(([streams, fn]) => fn.apply(fn, streams.toArray()))
+    .combine(fn, (streams, fn) => fn.apply(fn, streams.toArray()))
     .flatMap((stream) => Bacon.fromCallback(collectWithTimes, () => stream))
     .toProperty([])
     .map(Immutable.fromJS);
