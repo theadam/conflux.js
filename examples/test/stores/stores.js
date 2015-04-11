@@ -2,7 +2,8 @@ var R = require('ramda');
 
 module.exports = function(actions){
   return {
-    data: (init = []) => actions.addValue.merge(actions.addValue2).scan(init, R.appendTo),
-    loading: actions.addValue.waiting.or(actions.addValue2.waiting)
+    data: (init = []) => actions.value.added.merge(actions.value2.added).scan(init, R.appendTo),
+    loading: actions.value.add.awaiting(actions.value.added).or(
+        actions.value2.add.awaiting(actions.value2.added))
   };
 };

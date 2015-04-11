@@ -1,6 +1,5 @@
 module.exports = {
   getPromise(val){
-    console.log(val);
     return new Promise(function(resolve){
       setTimeout(function(){
         resolve(val);

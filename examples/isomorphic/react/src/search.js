@@ -30,6 +30,7 @@ var Search = React.createClass({
   },
 
   search: function(val){
+    if(!val) return;
     this.props.flux.actions.routeTo.push('/search/' + encodeURI(val));
     this.setState({
       defaultClass: 'search-focused'

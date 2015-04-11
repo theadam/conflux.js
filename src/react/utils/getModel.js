@@ -1,18 +1,23 @@
-var _ = require('lodash');
-var isBacon = require('../../utils/isBacon');
-var combine = require('../../utils/combine');
+import _ from 'lodash'
 
-module.exports = function getModel(stores, descriptor){
+import isBacon from '../../utils/isBacon'
+import combine from '../../utils/combine'
+
+export default function getModel(stores, descriptor){
+  return combine(internalGetModel(stores, descriptor));
+}
+
+function internalGetModel(stores, descriptor){
   if(_.isString(descriptor)){
-    return combine({[descriptor]: stores[descriptor]});
+    return {[descriptor]: stores[descriptor]};
   }
-  if(_.isArray(descriptor)){
-    return _.merge.apply(_, _.map(descriptor, (part) => getModel(stores, part)));
+  else if(_.isArray(descriptor)){
+    return _.merge.apply(_, _.map(descriptor, (part) => internalGetModel(stores, part)));
   }
   else if(_.isPlainObject(descriptor)){
-    return _.mapValues(descriptor, (value, key) => getModel(stores[key], value));
+    return _.mapValues(descriptor, (value, key) => internalGetModel(stores[key], value));
   }
   else{
     throw new Error('Unable to parse descriptor ' + descriptor);
   }
-};
+}

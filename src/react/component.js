@@ -4,8 +4,8 @@ var _ = require('lodash');
 var ConfluxComponent = React.createClass({
   mixins: [require('./mixin')()],
 
-  componentWillMount(){
-    this.listenTo(this.props.listenTo);
+  getInitialState(){
+    return this.listenTo(this.props.listenTo);
   },
 
   applyProps(child){

@@ -4,15 +4,8 @@ import _ from 'lodash'
 import isBacon from './utils/isBacon'
 
 export function createActions(actions){
-  if(actions instanceof Conflux.Bacon.Observable){
-    return {bus: actions, stream: actions, waiting: Conflux.Bacon.constant(false)};
-  }
-  else if(actions instanceof Function){
-    let bus = new Conflux.Bacon.Bus();
-    let stream = actions(bus);
-    let waiting = bus.awaiting(stream);
-    if(!(stream instanceof Conflux.Bacon.Observable)) throw new Error('Action function must return a Bacon Observable');
-    return {bus, stream, waiting};
+  if(isBacon(actions)){
+    return actions;
   }
   else if(_.isPlainObject(actions)){
     return _.mapValues(actions, createActions);

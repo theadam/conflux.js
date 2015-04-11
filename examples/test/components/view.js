@@ -13,8 +13,8 @@ module.exports = React.createClass({
   render: function(){
     return (
       <div>
-        <button onClick={() => this.handleClick(this.props.actions.addValue)}>Press</button>
-        <button onClick={() => this.handleClick(this.props.actions.addValue2)}>Press2</button>
+        <button onClick={() => this.handleClick(this.props.actions.value.add)}>Press</button>
+        <button onClick={() => this.handleClick(this.props.actions.value2.add)}>Press2</button>
         <div>{this.props.loading ? 'Loading...' : this.props.data.join(', ')}</div>
       </div>
     );

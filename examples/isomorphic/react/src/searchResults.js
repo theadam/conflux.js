@@ -13,7 +13,7 @@ var SearchResults = React.createClass({
       if(flux.stores.search.string.value === state.params.query) return Promise.resolve();
 
       var promise = flux.stores.search.string.changes().firstToPromise();
-      flux.actions.searchUpdate.push(state.params.query);
+      flux.actions.search.request.push(state.params.query);
       return promise;
     }
   },
