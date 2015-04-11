@@ -75,9 +75,7 @@ export default React.createClass({
     return {
       fill: '#ffffff',
       stroke: '#000000',
-      strokeWidth: 0.01,
-      [prefix('filter')]: 'drop-shadow(10px 10px 10px black)',
-      filter: 'drop-shadow(10px 10px 10px black)'
+      strokeWidth: 0.05
     };
   },
 
@@ -87,6 +85,9 @@ export default React.createClass({
       display: 'inlineBlock',
       verticalAlign: 'middle',
       width: '300px',
+      height: '100%',
+      fontSize: '18px',
+      fontWeight: 'bold',
       WebkitTouchCallout: 'none',
       [prefix('userSelect')]: 'none',
       userSelect: 'none'
@@ -106,7 +107,7 @@ export default React.createClass({
     return (
       <div style={this.style()} onMouseDown={handleDown} onTouchStart={handleDown}>
         <svg style={this.svgStyle()} viewBox="0 0 1 1">
-          <circle style={_.merge(this.circleStyle(), this.props.style)} cx={0.5} cy={0.5} r={0.48} />
+          <circle style={_.merge(this.circleStyle(), this.props.style)} cx={0.5} cy={0.5} r={0.40} />
         </svg>
         <div style={this.spacerStyle()} />
         <span style={this.textStyle()}>{this.props.value}</span>

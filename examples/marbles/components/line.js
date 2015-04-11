@@ -4,7 +4,7 @@ import _ from 'lodash'
 import Conflux from '../../../'
 const PureRenderMixin = React.addons.PureRenderMixin;
 
-const colors = ['#EE7777', '#7777FF', '#77EE77', '#DDDD77'];
+const colors = ['#FF8B83', '#FAFF83', '#86FF83', '#83FFF0', '#83B5FF'];
 
 export default React.createClass({
   mixins: [Conflux.Mixin(), PureRenderMixin],
@@ -46,16 +46,16 @@ export default React.createClass({
     return {
       fill: '#ffffff',
       stroke: '#000000',
-      strokeWidth: 0.03
+      strokeWidth: 0.2
     };
   },
 
   style(){
     return {
-      height: 32,
+      height: 45,
       width: '100%',
       position: 'relative',
-      marginBottom: 10
+      marginBottom: 40
     };
   },
 
@@ -65,8 +65,9 @@ export default React.createClass({
       height: '100%',
       left: `${x}%`,
       marginLeft: -16,
-      width: '32',
-      top: 0
+      width: '45',
+      top: 0,
+      zIndex: x
     };
   },
 
