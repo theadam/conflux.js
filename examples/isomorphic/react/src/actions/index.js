@@ -4,16 +4,6 @@ var Bacon = require('baconjs');
 
 var api = require('../api');
 
-function asyncAction(actionFn){
-  let request = new Bacon.Bus();
-  let result = actionFn(request);
-
-  return {
-    request,
-    result
-  };
-}
-
 module.exports = function createActions(){
   var setRouter = new Bacon.Bus();
   var router = setRouter.toProperty();
@@ -29,8 +19,8 @@ module.exports = function createActions(){
   });
 
   return {
-    game: asyncAction((bus) => bus.map(R.memoize(api.loadGameData)).flatMapLatest(Bacon.fromPromise)),
-    search: asyncAction((bus) => bus.map(api.search).flatMapLatest(Bacon.fromPromise)),
+    game: (bus) => bus.map(R.memoize(api.loadGameData)).flatMapLatest(Bacon.fromPromise),
+    search: (bus) => bus.map(api.search).flatMapLatest(Bacon.fromPromise),
     setRouter: setRouter,
     routeTo: routeTo,
     setRouteState: new Bacon.Bus()

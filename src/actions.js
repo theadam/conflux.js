@@ -2,10 +2,14 @@ import Conflux from './conflux'
 import _ from 'lodash'
 
 import isBacon from './utils/isBacon'
+import asyncAction from './utils/asyncAction'
 
 export function createActions(actions){
   if(isBacon(actions)){
     return actions;
+  }
+  else if(_.isFunction(actions)){
+    return asyncAction(actions);
   }
   else if(_.isPlainObject(actions)){
     return _.mapValues(actions, createActions);
