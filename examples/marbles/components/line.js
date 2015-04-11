@@ -4,7 +4,7 @@ import _ from 'lodash'
 import Conflux from '../../../'
 const PureRenderMixin = React.addons.PureRenderMixin;
 
-const colors = ['#FF8B83', '#FAFF83', '#86FF83', '#83FFF0', '#83B5FF'];
+const colors = ['#FF4F38', '#FFBD38', '#38FFA5', '#3883FF'];
 
 export default React.createClass({
   mixins: [Conflux.Mixin(), PureRenderMixin],

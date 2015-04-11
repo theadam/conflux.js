@@ -9,7 +9,8 @@ export default React.createClass({
   style(){
     return {
       position: 'relative',
-      height: '100%'
+      height: '100%',
+      backgroundColor: '#EEEEEE'
     };
   },
 
@@ -20,8 +21,10 @@ export default React.createClass({
       position: 'absolute',
       left: 0,
       top: 0,
+      fontSize: '32px',
       overflowX: 'hidden',
-      borderRight: '4px solid'
+      borderRight: '3px solid',
+      backgroundColor: '#FEFEFE'
     };
   },
 

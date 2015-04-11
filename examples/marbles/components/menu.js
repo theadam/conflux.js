@@ -14,15 +14,15 @@ export default React.createClass({
 
   groupStyle(){
     return {
-      color: '#878787'
+      color: '#676767',
+      fontWeight: 'bold'
     };
   },
 
   descriptorStyle(){
     return {
       cursor: 'pointer',
-      textDecoration: 'underline',
-      color: '#333366'
+      color: '#333333'
     };
   },
 
