@@ -10,8 +10,6 @@ export default React.createClass({
       height: height,
       lineHeight: `${height}px`,
       width: '100%',
-      borderTop: '1px solid',
-      borderBottom: '1px solid',
       marginBottom: 40
     };
   },
